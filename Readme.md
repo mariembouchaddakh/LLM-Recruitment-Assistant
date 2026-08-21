@@ -1,147 +1,54 @@
-# RecrutAI — Système de filtrage automatique de candidatures
+# RecrutAI : Système d'Intelligence Artificielle pour le Filtrage et l'Évaluation de Candidatures
 
-> Projet NLP — Filtrage de CV par TF-IDF & Sentence-BERT + Chatbot présélectif via LLM
+## 📌 Contexte du Projet (Recherche & Application Entreprise)
+Le recrutement moderne fait face à un volume massif de candidatures (CVs), rendant le tri manuel chronophage et sujet aux biais cognitifs.
+- **Aspect Recherche (NLP & LLM)** : Ce projet explore l'hybridation de techniques classiques d'extraction d'information (TF-IDF) avec des modèles de plongement sémantique denses (Sentence-BERT). Il intègre également une phase d'évaluation conversationnelle automatisée pilotée par un Large Language Model (LLaMA 3.3 70B) agissant comme un agent recruteur adaptatif.
+- **Aspect Entreprise (HR Tech)** : Outil B2B conçu pour les départements Ressources Humaines (RH) et les cabinets de recrutement. Il automatise la phase de présélection (Screening) avec un haut degré de précision, réduisant le Time-to-Hire tout en augmentant la qualité des profils retenus via un score composite (Sémantique CV + Entretien Chatbot).
 
----
+## 🏗️ Architecture et Stack Technologique
+L'architecture est optimisée pour une faible latence et une évolutivité Cloud :
+- **Vectorisation Lexicale** : `scikit-learn` (TF-IDF) pour la correspondance stricte de mots-clés.
+- **Plongement Sémantique Denses** : `sentence-transformers` (`paraphrase-multilingual-MiniLM-L12-v2`) pour capturer le contexte et les analogies métiers (ex: "développeur" ≈ "ingénieur logiciel").
+- **Agent Conversationnel (LLM)** : LLaMA 3.3 70B orchestré via l'API Groq (inférence ultra-rapide), permettant de générer des questions d'entretien adaptées dynamiquement au profil.
+- **Interface Utilisateur (UI)** : Développée en Python via **Streamlit**, offrant des tableaux de bord interactifs et des analyses comparatives (Matplotlib).
 
-## Aperçu
+## 📊 Flux d'Évaluation et Métriques
+Le système calcule un score d'affinité composite robuste :
+`Score Final = 0.4 * Score_SBERT_CV + 0.6 * Score_Entretien_LLM`
 
-RecrutAI est un système automatisé de présélection de candidatures en deux étapes :
+1. **Filtrage Sémantique** : Les CVs franchissant un seuil de similarité cosinus avec la fiche de poste sont retenus.
+2. **Entretien Automatisé** : Le chatbot évalue la pertinence des réponses du candidat et attribue une note automatisée sur 10.
 
-1. **Filtrage des CV** par similarité sémantique (TF-IDF et Sentence-BERT)
-2. **Entretien chatbot** adaptatif via un LLM (LLaMA 3.3 70B / Groq)
+## 🚀 Instructions d'Installation et d'Inférence
 
-Le recruteur humain ne reçoit que les candidats les mieux classés après les deux filtres.
+### Prérequis
+- Python 3.10+
+- Un compte Groq (API gratuite)
 
----
+### Déploiement Local
 
-## Stack technique
+1. **Cloner le dépôt** :
+   ```bash
+   git clone https://github.com/mariembouchaddakh/projetNLP.git
+   cd projetNLP
+   ```
 
-| Composant | Technologie |
-|---|---|
-| Vectorisation classique | TF-IDF — `scikit-learn` |
-| Vectorisation sémantique | SBERT — `paraphrase-multilingual-MiniLM-L12-v2` |
-| Chatbot LLM | LLaMA 3.3 70B via API Groq (gratuit) |
-| Interface | Streamlit |
-| Langage | Python 3.10+ |
+2. **Installer les dépendances** :
+   ```bash
+   pip install -r requirements.txt
+   ```
 
----
+3. **Configuration de l'Agent LLM** :
+   Dans le fichier `src/chatbot.py`, configurez votre clé API Groq via une variable d'environnement ou directement dans l'instanciation du client (à ne pas commiter).
 
-## Structure du projet
+4. **Lancer l'application Web** :
+   ```bash
+   streamlit run app.py
+   ```
+   L'interface de scoring et le chatbot seront accessibles sur `http://localhost:8501`.
 
-```
-projetNLP/
-├── data/
-│   ├── job_desc.txt        # Fiche de poste
-│   └── cvs/
-│       ├── cv1.txt         # Profil fort
-│       ├── cv2.txt         # Profil moyen
-│       ├── cv3.txt         # Profil fort
-│       ├── cv4.txt         # Profil faible
-│       └── cv5.txt         # Profil moyen
-├── src/
-│   └── chatbot.py          # Logique du chatbot LLM
-├── app.py                  # Application Streamlit
-├── test.py                 # Test du pipeline NLP en terminal
-├── requirements.txt
-└── README.md
-```
-
----
-
-## Installation
-
+### Tests en ligne de commande
+Pour valider le pipeline NLP sans l'interface :
 ```bash
-# 1. Cloner le dépôt
-git clone https://github.com/votre-username/projetNLP.git
-cd projetNLP
-
-# 2. Installer les dépendances
-py -m pip install -r requirements.txt
+python test.py
 ```
-
-`requirements.txt` :
-```
-scikit-learn>=1.3.0
-sentence-transformers>=2.2.0
-streamlit>=1.28.0
-groq>=0.4.0
-matplotlib>=3.7.0
-numpy>=1.24.0
-```
-
----
-
-## Configuration
-
-1. Créez un compte gratuit sur [console.groq.com](https://console.groq.com)
-2. Générez une clé API
-3. Dans `src/chatbot.py`, remplacez :
-
-```python
-client = Groq(api_key="gsk_xxxxxxxxxxxxxxxxxxxxxxxx")
-```
-
-> **Ne committez jamais votre clé API.** Ajoutez un fichier `.env` et utilisez `python-dotenv`, ou configurez la variable d'environnement `GROQ_API_KEY`.
-
----
-
-## Utilisation
-
-### Test rapide en terminal
-
-```bash
-py test.py
-```
-
-Affiche le tableau comparatif TF-IDF vs SBERT pour tous les CV.
-
-### Lancer l'interface web
-
-```bash
-py -m streamlit run app.py
-```
-
-Ouvre l'application sur `http://localhost:8501`.
-
-### Workflow
-
-1. Cliquer **"Analyser les CV"** dans la barre latérale
-2. Onglet **Filtrage CV** → scores TF-IDF vs SBERT + graphique
-3. Ajuster le seuil de présélection avec le slider
-4. Onglet **Entretien Chatbot** → sélectionner un candidat → démarrer
-5. Répondre aux questions → le chatbot conclut avec un score /10
-6. Score final combiné affiché avec recommandation
-
----
-
-## Score final
-
-```
-score_final = 0.4 × score_cv (SBERT) + 0.6 × score_chatbot
-```
-
-| Score final | Recommandation |
-|---|---|
-| ≥ 0.75 | Entretien humain prioritaire |
-| 0.60 — 0.74 | Entretien humain recommandé |
-| 0.40 — 0.59 | À examiner |
-| < 0.40 | Non retenu |
-
----
-
-## Pourquoi ces choix ?
-
-**TF-IDF** — baseline rapide et interprétable, efficace pour les correspondances exactes de mots-clés.
-
-**SBERT** — capture la sémantique : *"développeur"* et *"ingénieur logiciel"* sont reconnus comme proches. Le modèle multilingue MiniLM supporte le français.
-
-**Groq / LLaMA 3.3** — API gratuite, très rapide, compatible syntaxe OpenAI. Permet un entretien adaptatif au profil de chaque candidat sans frais.
-
----
-
-## Référence
-
-- Reimers & Gurevych (2019). *Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks.* EMNLP 2019.
-- [Documentation sentence-transformers](https://www.sbert.net)
-- [Documentation Groq API](https://console.groq.com/docs)
