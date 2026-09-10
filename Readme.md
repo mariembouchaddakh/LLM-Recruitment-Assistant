@@ -1,9 +1,9 @@
 # RecrutAI : Système d'Intelligence Artificielle pour le Filtrage et l'Évaluation de Candidatures
 
-## Contexte du Projet (Recherche & Application Entreprise)
+## Contexte du Projet 
 Le recrutement moderne fait face à un volume massif de candidatures (CVs), rendant le tri manuel chronophage et sujet aux biais cognitifs.
-- **Aspect Recherche (NLP & LLM)** : Ce projet explore l'hybridation de techniques classiques d'extraction d'information (TF-IDF) avec des modèles de plongement sémantique denses (Sentence-BERT). Il intègre également une phase d'évaluation conversationnelle automatisée pilotée par un Large Language Model (LLaMA 3.3 70B) agissant comme un agent recruteur adaptatif.
-- **Aspect Entreprise (HR Tech)** : Outil B2B conçu pour les départements Ressources Humaines (RH) et les cabinets de recrutement. Il automatise la phase de présélection (Screening) avec un haut degré de précision, réduisant le Time-to-Hire tout en augmentant la qualité des profils retenus via un score composite (Sémantique CV + Entretien Chatbot).
+- **NLP & LLM**: Ce projet explore l'hybridation de techniques classiques d'extraction d'information (TF-IDF) avec des modèles de plongement sémantique denses (Sentence-BERT). Il intègre également une phase d'évaluation conversationnelle automatisée pilotée par un Large Language Model (LLaMA 3.3 70B) agissant comme un agent recruteur adaptatif.
+- **HR Tech** : Outil B2B conçu pour les départements Ressources Humaines (RH) et les cabinets de recrutement. Il automatise la phase de présélection (Screening) avec un haut degré de précision, réduisant le Time-to-Hire tout en augmentant la qualité des profils retenus via un score composite (Sémantique CV + Entretien Chatbot).
 
 ## Architecture et Stack Technologique
 L'architecture est optimisée pour une faible latence et une évolutivité Cloud :
